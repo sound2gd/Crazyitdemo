@@ -20,7 +20,7 @@ public class RuntimeTest {
 		System.out.println("可用最大内存数:" + runtime.maxMemory() / 1000 / 1000 + "M");
 
 		// 通过runtime.exec可以执行操作系统的命令
-		Process exec = runtime.exec("pwd");
+		Process exec = runtime.exec("ls -ltr");
 		//得到执行的结果,并输出到控制台
 		InputStream inputStream = exec.getInputStream();
 		byte[] buffer = new byte[1024];
