@@ -29,7 +29,7 @@ public class ScannerTest {
 		//Scanner的读取操作可能被阻塞来等待信息的输入
 		
 		//Scanner读取文件作为输入流
-		sc = new Scanner(new File("./ScannerTest.java"));
+		sc = new Scanner(new File("src/com/cris/chapter07/ScannerTest.java"));
 		System.out.println("ScannerTest.java文件的内容如下:");
 		while(sc.hasNext()){
 			System.out.println(sc.nextLine());

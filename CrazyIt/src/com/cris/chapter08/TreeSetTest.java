@@ -18,6 +18,9 @@ public class TreeSetTest {
 		set.add(11);
 		set.add(2);
 		set.add(453);
+		//TreeSet不允许插入null,下面一行会报空指针异常
+//		set.add(null);
+		
 		//输出升序排列的元素
 		System.out.println(set);
 		
