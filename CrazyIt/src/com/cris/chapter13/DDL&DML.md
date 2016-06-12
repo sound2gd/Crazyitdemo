@@ -36,6 +36,11 @@ view是一个或者多个数据的逻辑展示
 删除使用drop view 视图名
 
 
+## DML
+DML,Data Manipulation Language,数据操作语言。
+是用来改变数据库中的数据的，包括insert into,update,delete from三个
+
+
 
 
 
