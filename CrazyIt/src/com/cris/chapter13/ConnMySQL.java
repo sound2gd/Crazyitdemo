@@ -40,6 +40,8 @@ public class ConnMySQL {
 		}
 		// 6，释放数据库资源
 		connection.close();
+		statement.close();
+		result.close();
 	}
 
 }
