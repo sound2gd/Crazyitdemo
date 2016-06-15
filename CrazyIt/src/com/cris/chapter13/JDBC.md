@@ -31,6 +31,16 @@ JDBC一般编程步骤包括如下:
 5,得到所要的结果集数据
 6，回收数据库资源
 
+## 3,执行SQL语句的方式
+执行的方式有仨，
+1. 使用Statement的execute,executeQuery,executeUpdate
+2. 使用PreparedStatement
+3. 使用CallableStatement调用存储过程
+
+
+
+
+
 
 
 
