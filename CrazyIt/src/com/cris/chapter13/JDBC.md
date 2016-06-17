@@ -38,6 +38,35 @@ JDBC一般编程步骤包括如下:
 3. 使用CallableStatement调用存储过程
 
 
+### 4,Java7的RowSet
+RowSet继承了ResultSet接口，包含JdbcRowSet,CachedRowSet,FilteredRowSet,
+JoinRowSet,除了JdbcRowSet需要保持与数据库的连接之外，其余4个子接口都是离线的
+RowSet,无需保持与数据库的连接
+
+### 5,DatabaseMetaData
+DatabaseMetaData保存了数据库的元信息
+除此之外，我们还可以使用系统表来查询数据库信息
+
+通常:
+tables:存放了所有的数据表信息
+schema:存放了数据库里所有的数据库信息
+views:存放了所有的视图信息
+columns:存放数据库里所有列的信息
+triggers:存放数据库里所有的触发器信息
+routines:存放数据库里所有存储过程和函数信息
+key_column_usage:存放数据库里所有具有约束的键的信息
+table_constraints:存放数据库里全部约束的表信息
+statistics:存放数据库里所有的索引信息
+
+
+
+
+
+
+
+
+
+
 
 
 
