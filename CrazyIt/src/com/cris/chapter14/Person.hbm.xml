@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+		"-//Hibernate/Hibernate Mapping DTD 3.0//EN">
+<hibernate-mapping>
+<class name="Person
+" table="test_person">
+		<id name="id" column="id" type="int" />
+		<property name="name" column="name" type="String" />
+		<property name="age" column="age" type="int" />
+		</class>
+</hibernate-mapping>
