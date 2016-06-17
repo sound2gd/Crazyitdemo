@@ -2,6 +2,7 @@
 
 
 知识点：
+
 1. JDK提供的5个基本Annotation
 2. JDK提供的6个修饰Annotation的元注解
 3. 自定义Annotation
@@ -33,6 +34,7 @@ Java8提供了@FunctionalInterface来标记一个接口是函数式接口，以�
 ### 二，元注解(Meta Annotation)
 所谓的元注解，就是注解其他注解的注解
 JDK包括6种元注解:
+
 1. @Retention
 2. @Target
 3. @Docuemnted
@@ -42,12 +44,14 @@ JDK包括6种元注解:
 
 ***
 
-@Retention是标注该注解要保留到什么时候，取值有3个，分别是
+@Retention是标注该注解要保留到什么时候，取值有3个，分别是：
+
 1. RetentionPolicy.CLASS 把该注解写入类文件字节码中，这是默认值，在运行时将无法读取
 2. RetentionPolicy.RUNTIME 把该注解写入类文件字节码中，运行时将可以通过反射读取该注解信息
 3. RetentionPolicy.SOURCE 仅在源码中使用，编译器将直接丢弃该注解
 
 @Target是标志一个注解要注解在什么元素上，取值有8个，分别是:
+
 1. ElementType.ANNOTATION_TYPE 只能注解在注解上
 2. ElementType.CONSTRUCTOR 可以注解在构造器上
 3. ElementType.TYPE 可以注解在类上
@@ -86,6 +90,7 @@ JDK包括6种元注解:
 ***
 Java使用java.lang.annotation.Annotation来代表程序元素前面的注解，该接口是所有接口的父接口
 该接口主要有以下实现类:
+
 1. Class:类定义
 2. Constructor:构造器定义
 3. Field:类成员变量定义
