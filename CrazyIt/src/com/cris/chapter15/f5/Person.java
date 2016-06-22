@@ -8,13 +8,14 @@ import java.io.Serializable;
  * @author sound2gd
  *
  */
-public class Person implements Serializable{
+public class Person implements Serializable {
 
 	private String name;
-	private int age;
+	private transient int age;
 
 	public Person(String name, int age) {
 		super();
+		System.out.println("Person有参数的构造器");
 		this.name = name;
 		this.age = age;
 	}
@@ -39,4 +40,20 @@ public class Person implements Serializable{
 	public String toString() {
 		return "Person [name=" + name + ", age=" + age + "]";
 	}
+//=======================================================================
+	//自定义序列化，上面的transient不起作用
+	
+	private void writeObject(java.io.ObjectOutputStream out) throws Exception {
+		// 自定义序列化
+		// 将name的值反转后写入二进制流
+		out.writeObject(new StringBuffer(name).reverse());
+		out.writeInt(age);
+	}
+	
+	private void readObject(java.io.ObjectInputStream in) throws Exception {
+		this.name=in.readObject().toString();
+		this.age = in.readInt();
+	}
+	
+	
 }

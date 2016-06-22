@@ -6,32 +6,28 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 /**
- * 测试序列化<br>
- * 写入Java对象到文件<br>
- * 从文件中读取Java对象
+ * 测试Externalizable实现序列化 据传性能比Serializable快很多
  * 
  * @author sound2gd
  *
  */
-public class SerializeTest {
+public class ExternalizableTest {
 
 	public static void main(String[] args) {
-
-		Person person = new Person("孙悟空", 500);
+		PersonEx p = new PersonEx("猪八戒", 300);
 		try (ObjectOutputStream oos = new ObjectOutputStream(
 				new FileOutputStream("src/com/cris/chapter15/f5/obj.txt"));) {
-			oos.writeObject(person);
+			oos.writeObject(p);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("src/com/cris/chapter15/f5/obj.txt"))) {
-			Person p =(Person) ois.readObject();
-			System.out.println(p);
+			PersonEx readObject = (PersonEx) ois.readObject();
+			System.out.println(readObject);
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
-
 	}
 
 }
