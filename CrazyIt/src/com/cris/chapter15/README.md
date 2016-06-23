@@ -186,6 +186,56 @@ transient,而不是static(static修饰的是类变量，不属于对象)。
 
 最后，介绍一下版本(serialVersionUID):反序列化必须提供该对象的class文件，为了保证两个class文件之间的兼容性，需要一个类变量标识该class的版本。只要SerialVersionUID不变，就认为是同一个序列化版本
 
+### 六，NIO
+NIO是java1.4之后加入的，传统的IO是要阻塞等待数据的存取的，而且面向流的IO系统只能一次处理一个字节，
+因此效率不高。
+
+NIO就是为了改进这些问题而诞生的，NIO采用了**内存映射文件**的方式来处理IO流，新IO将文件或者文件的一段区域
+映射到内存中，这样就可以像访问内存一样来访问文件了。BIO是面向流的处理，NIO是面向块的处理。
+
+NIO中的两个核心对象分别是:
+
+1. Channel 通道，是对传统IO的模拟，NIO中的所有数据都要放在通道里传输
+2. Buffer 缓冲,可以理解为一个容器，本质是一个数组。发送到Channel中的所有对象必须首先放在Buffer中。
+
+此外，NIO还提供了两个对象:
+
+3. Charset:将字符串映射成字节序列以及逆映射操作。
+4. Selector:用于支持非阻塞式IO
+
+#### Buffer
+Buffer的创建时通过Buffer类的静态方法来创建的。
+Buffer有三个核心概念:
+
+1. position:位置，用于指明下一个可以被读出的或者写入的缓冲区位置索引
+2. limit:界限，第一个不应该被读出或者写入的缓冲区位置索引
+3. capacity:容量，创建后不能改变
+
+Buffer类有一个实例方法:flip()。其作用是将limit设置为position所在的位置，然后将position置为0
+，这就使得Buffer的读写指针又回到了开始位置。
+clear()方法就是将position置为0，limit置为capacity.
+
+通过Buffer.allocate(xx)创建的只是普通Buffer，ByteBuffer还提供了一个allocateDirect方法
+创建直接buffer,创建成本高但是直接Buffer的读取效率更高。
+
+#### Channel
+Channel类似于传统的流对象，与传统的流对象有俩区别:
+
+1. Channel可以直接将指定的文件的部分或者全部直接映射成Buffer
+2. 程序不能直接访问Channel中的数据，包括读取，写入都不行。Channel只能和Buffer交互
+
+java的NIO中Channel的主要实现类有:
+DatagramChannel,FileChannel,Pipe.SinkChannel,Pipe.SourceChannel,
+SelectableChannel,ServerSocketChannel,SocketChannel等等
+
+**所有的Channel都不应该通过构造器来创建，而是通过传统的节点流的getChannel方法来创建**
+Channel最常用的方法map(),read(),write();
+
+
+
+
+
+2. 
 
 
 
