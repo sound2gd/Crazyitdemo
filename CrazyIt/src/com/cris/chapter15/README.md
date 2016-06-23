@@ -278,8 +278,8 @@ Java7把这些NIO的改进称为NIO.2
 
 NIO.2引入了Path接口，代表一个与平台无关的平台路径。
 同时还提供了Paths和Files类，提供了大量的操作文件的方法。
-
-
+Files类还提供了FileVisitor来遍历目录。Path类提供了watchService可以
+监控文件的变化
 
 
 
