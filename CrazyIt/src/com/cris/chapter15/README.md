@@ -231,11 +231,33 @@ SelectableChannel,ServerSocketChannel,SocketChannel等等
 **所有的Channel都不应该通过构造器来创建，而是通过传统的节点流的getChannel方法来创建**
 Channel最常用的方法map(),read(),write();
 
+#### 字符集和Charset
+计算机里的文件，数据，图片只是一种表面现象，所有的文件底层都是二进制文件，全部都是**字节码**。
+**编码**就是把字符序列转化成二进制序列，**解码**就是把二进制序列转化成字符序列
+
+JDK1.4之后提供了Charset类来支持字符集，常用的Charset有:
+
+- UTF-8
+- GBK
+- ISO-8859-1
+- BIG5繁体字符集
+- UTF-16
+ 
+Java7新增了StandardCharsets类，用来支持常用的Charset
+Charset类有2个实例方法，分别是**newDecoder（解码器）**和**newEncoder（编码器）**
+用来支持编解码操作
+
+#### 文件锁
+多个运行程序需要并发修改同一个文件的时候，程序之间需要某种机制来通信，文件锁就是为了解决这个问题的。
+JDK1.4以后，提供文件锁的支持。NIO中使用FileLock的tryLock()/lock()方法来提供支持。
+lock()是阻塞等待，tryLock()不成功则返回null，成功返回文件锁。
+这两个方法都有一个参数shared,如果shared为true，则是共享锁，允许别的程序读取该文件，如
+果shared为false,则是排他锁，其他文件不允许使用该文件。
 
 
 
 
-2. 
+
 
 
 
