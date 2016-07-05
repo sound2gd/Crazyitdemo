@@ -190,6 +190,114 @@ join方法通常由使用线程的程序调用，以将大问题分成许多小�
 3. 使用BlockingQueue
 4. 使用PipeXXXStream
 
+#### 4.1 传统的线程通信
+  Object类的对象有3个方法，用于实现线程间通信，分别是:
+  
+  1. wait():导致当前线程等待，直到其他线程调用该同步监视器的notify方法或者notifyAll方法来
+  唤醒该线程。
+  2. notify():唤醒在此同步监视器上等待的单个线程，如果所有线程都在此同步监视器上等待，则会选择唤醒
+  其中的一个线程。选择是任意性的。
+  3. notifyAll():唤醒在此同步监视器上等待的所有线程，只有当前线程放弃对该同步监视器的锁定之后，才可以
+  执行被唤醒的线程。
+  
+  这三个方法必须由同步监视器对象来调用。
+  
+#### 4.2 使用Condition进行线程通信
+  当使用Lock来保证同步时，Java提供了一个Condition类来保证线程协调。使用Condition可以让那些已经得到Lock对象却
+  无法继续执行的线程释放Lock对象，Condition对象也可以唤醒其他处于等待的线程。
+  
+  Condition对象有3个方法,分别对应wait,notify,notifyAll:
+  
+  1. await()
+  2. signal()
+  3. signalAll()
+  
+  这三个方法必须由同一个Condition来调用
+
+
+#### 4.3 使用BlockingQueue来进行线程通信
+Java5以后提供了一个BlockingQueue,主要用途是用于线程同步的工具
+它有一个特征:当生产者线程试图向BlockingQueue中放入元素时，如果该队列已满，则该线程被阻塞，
+当消费者线程试图向BlockingQueue取出元素时，如果该队列已空，则该线程被阻塞
+
+BlockingQueue提供了以下两个阻塞方法:
+
+1. put()
+2. take()
+
+BlockingQueue的常用实现类有:ArrayBlockingQueue,LinkedBlockingQueue,PriorityBlockingQueue（每次取出最小的元素）,
+SynchronousQueue(同步队列，对该队列的存取必须交替进行),DelayQueue
+
+### 五，线程组和未处理的异常
+Java使用ThreadGroup来表示线程租，它可以对一批线程进行分类管理，Java允许程序直接对线程组进行控制。对线程组的控制相当于
+同时控制这批线程。在默认情况下，子线程和父线程处于同一线程组内。
+
+一旦某个线程加入了指定的线程组之后，该线程将一直属于它的线程组，知道该线程死亡，线程运行中途不能改变它所属的线程租。
+
+Thread提供了构造器来设置创建的线程属于哪个线程租。
+
+ThreadGroup提供了以下几个常用方法来操作整个线程组里的所有线程:
+
+1. int activeCount()：活动线程的数量
+2. interrupt():中断此线程组中的所有线程。
+3. isDaemon():判断该线程组是否属于后台线程组
+4. setDaemon(boolean):设置线程组为后台线程组
+5. setMaxPriority(int):设置线程租的最高优先级
+
+ThreadGroup 还有一个十分实用的方法uncaughtExceptionHandler()，可以设置处理该线程组里所有抛出的未处理异常
+线程组默认处理异常的逻辑如下:
+
+1. 如果该线程组有父线程组，则调用父线程组的uncauthtExceptionHandler
+2. 如果该线程实例所属的线程类有默认的异常处理器，那么调用该异常处理器来处理异常
+3. 如果该异常对象是ThreadDeath对象，则不做任何处理，否则，将异常追踪栈的信息打印到System.err，并结束该线程
+
+异常处理器和catch语法是不一样的，即使调用了异常处理器，异常仍然会传递给上一级调用者
+
+### 六，线程池
+系统启动一个线程的成本是比较高的，所以出现了一种名为"线程池"的技术。线程池在和数据库连接池类似，
+线程池在系统启动的时候创建大量空闲线程，程序将一个Runnable对象或者Callable对象传入线程池，线程池会
+启动一个线程来执行他们的run()方法或者call()方法。当run或者call结束后，该线程不会死亡，而是进入线程池中称为空闲状态。
+
+
+从Java5开始，开发者无需手动实现自己的线程池，开始内建支持线程池。Java5新增了一个Executors工厂类来生产线程池。
+有如下常用静态方法:
+
+1. newCachedThreadPool：创建一个具有缓存功能的线程池，系统根据需要创建线程，这些线程将会被缓存在线程池中
+2. newFixedThreadPool：创建一个可重用的，具有固定线程数量的线程池
+3. newSingleThreadExcutor：只有一个线程的线程池
+4. newScheduledThreadPool：创建具有指定线程数的线程池，可以在指定延迟之后执行线程任务
+5. newSingleThreadScheduledExecutor：只有一个线程的线程池，可以在指定的延时之后执行任务
+6. newWorkingStealingPool:创建持有足够线程的线程池来支持给定的并行级别，该方法会使用多个队列来减少竞争
+
+前三个方法都返回一个ExecutorService对象，该对象代表一个尽快执行的线程池(只要线程中有空闲线程，就立即执行任务),
+提供了以下3个方法:
+
+1. Future<?> submit(Runnable task)
+2. <T>Future<T> submit(Runnable task,T result):将一个Runnable交给指定线程池，线程池将在有空闲的时候执行task,
+result显式指定返回值
+3. <T>Future<T> submit(Callable<T> task)：将一个Callable传给线程池
+
+
+用完一个线程池之后，应该调用该线程池的shutdown()方法。该方法将启动线程池的关闭序列，调用shutdown方法之后的所有线程
+池都将不再接受新的任务，但是会将以前的所有提交的任务执行完成。
+
+使用线程池执行线程任务的步骤如下:
+
+1. 调用Executors类的静态工厂生产一个ExecutorService对象，该对象代表一个线程池
+2. 创建Runnable实现类或者Callable实现类的实例，作为线程执行任务
+3. 调用ExecutorService的submit方法提交Runnable或者Callable实例
+4. 当不想提交任何任务时，调用ExecutorService对象的shutdown方法来关闭线程池
+
+
+
+
+
+
+
+
+  
+  
+  
 
 
 
