@@ -288,6 +288,73 @@ result显式指定返回值
 3. 调用ExecutorService的submit方法提交Runnable或者Callable实例
 4. 当不想提交任何任务时，调用ExecutorService对象的shutdown方法来关闭线程池
 
+***
+
+现在计算机大部分都是多核的CPU，为了充分利用CPU的计算能力，可以考虑把一个大任务分成多个
+小任务并行计算，再把多个小任务的结果合并成总的计算结果。
+
+Java7提供了ForkJoinPool来支持将一个任务拆分成多个"小任务"并行计算，再把多个小任务的结果合并成
+总的计算结果，ForkJoinPool是ExecutorService的常见实现类因此是一种特殊的线程池，提供了2个构造器：
+
+1. ForkJoinPool(int parallalism):创建一个包含parallelism个并行线程的ForkJoinPool
+2. ForkJoinPool(),创建一个包含Runtime.availableProcessors()为参数个并行线程的ForkJoinPool
+
+Java8为ForkJoinPool增加了通用池功能，通用池的运行状态不会收到shutdown或者shutdownNow的影响
+创建ForkJoinPool之后，可以提交ForkJoinTask来执行任务，ForkJoinTask代表一个可以并行，合并的任务
+常用的抽象子类有:RecursiveAction（无返回值）和RecursiveTask(有返回值)
+
+### 七，线程相关工具
+
+Java为线程安全提供了一些工具类，如ThreadLocal,Collections.synchronizedXXX,java.util.concurrent包下的一堆东西
+
+早在JDK1.2推出的时候，Java就为多线程编程提供了一个ThreadLocal类，通过使用ThreadLocal类可以简化多线程编程时的并发访问，
+使用这个工具类可以很简洁的隔离多线程程序的竞争资源
+
+ThreadLocal的功用非常简单，就是为每一个使用该变量的线程提供一个变量值的副本，使得每一个线程都可以独立得改变自己的副本，而
+不会和其他线程持有的副本冲突。从线程的角度看，好像线程持有该变量一样。
+
+有3个简单的方法:
+
+1. T get(),返回此线程局部变量中当前副本中的值
+2. void remove(),返回此线程局部变量中当前线程的值
+3. void set(T value),设置此线程局部变量中当前线程副本中的值。
+
+Java集合里的ArrayList,HashSet,LinkedList,TreeSet,HashMap,TreeMap都是线程不安全的，要想并发访问，
+可以使用Collections类提供的静态方法来保证线程安全性。
+
+
+**如果需要把某个集合包装成线程安全的集合，应该在创建之后立刻包装**
+
+***
+从Java5开始，在java.util.concurrent包下提供了大量的支持高效并发访问的集合接口和实现类
+这些线程安全的集合类可分为2类：
+
+1. Concurrent开头的集合类，如ConcurrentHashMap,ConcurrentSkipListMap,ConcurrentSkipListSet,ConcurrentLinkedQueue和
+ConcurrentLinkedDeque
+2. 以CopyOnWrite开头的集合类，如CopyOnWriteArrayList,CopyOnWriteArraySet。
+
+以Concurrent开头的集合类代表了支持并发访问的集合，他们可以支持多个线程高效并发写入和访问。它们采用了复杂的算法来保证永远不会锁住集合，
+从而在并发写入的时候有较好的性能。
+
+
+当多个线程共享访问一个公共集合时，ConcurrentLinkedQueue是一个恰当的选择。
+默认情况下，ConcurrentHashMap支持16个线程并发写入，当超过16个线程并发写入时，可能有线程要等待。
+
+对于CopyOnWriteArrayList而言，底层复制数组的形式来实现写操作，当执行读操作的时候，将会直接读取集合本身，无需加锁和解锁。
+执行写入操作的时候，集合会在底层复制一份数组，接下来对新的数组执行写入操作，所以是线程安全的。
+所以CopyOnWriteArrayList的写入性能很差，但是读取性能很高，所以适合读多写少的情况，如缓存。
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

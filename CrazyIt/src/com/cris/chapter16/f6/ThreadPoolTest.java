@@ -12,15 +12,19 @@ import java.util.concurrent.Executors;
 public class ThreadPoolTest {
 
 	public static void main(String[] args) {
+		// 1，首先，通过Executors得到一个线程池对象
 		ExecutorService pool = Executors.newFixedThreadPool(2);
-		Runnable target = ()->{
+		// 2，定义一个任务
+		Runnable target = () -> {
 			for (int i = 0; i < 200; i++) {
-				System.out.println(Thread.currentThread().getName()+",i="+i);
+				System.out.println(Thread.currentThread().getName() + ",i=" + i);
 			}
 		};
+		// 3,向线程池提交任务
 		pool.submit(target);
 		pool.submit(target);
+		// 4，关闭线程池
 		pool.shutdown();
 	}
-	
+
 }
