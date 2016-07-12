@@ -156,14 +156,33 @@ Socket提供了两个半关闭输出流的方法，只关闭Scoket的输入流�
 
 > 即使一个Socket同时调用了这俩方法，这个Socket还是没有关闭，只是不能读取和写出数据而已
 
+#### NIO实现非阻塞通信
+从JDK1.4开始，Java提供了NIO开开发高性能的网络服务器。
 
+前面介绍的网络通信都是基于BIO的，也就是说，当程序执行输入，输出的时候，在这些
+操作返回之前必须为每个客户端都提供一个独立线程进行处理，当服务器需要同时服务大量用户时，
+这种做法会导致性能急剧下降。
 
+> 使用NIO可以让服务器端使用一个或者几个线程来同时处理连接到服务器的所有客户端
 
+Java为NIO的非阻塞式Socket提供了如下几个特殊类:
 
+- Selector：它是SelectableChannel对象的多路复用器，所有希望采用非阻塞方式进行通信的
+Channel都应该注册到Selector对象。
 
+Selector可以同时监控多个SelectableChannel的IO状况，是非阻塞IO的核心，一个Selector
+有三个SelectionKey集合
 
+1. 所有的SelectionKey集合，代表了注册在该Selector上的Channel
+2. 被选择的SelectionKey集合:代表了所有可以通过select 方法获取的，需要进行IO处理的Channel
+3. 被取消的SelectionKey集合：代表了所有被取消注册关系的Channel,在下次执行select方法时。这些
+Channel对应的SelectKey会被彻底删除
 
+`SelectableChannel`代表可以支持非阻塞IO操作的`Channel`对象，它可以被注册到`Selector`上，
+这种注册关系由**SelectionKey**实例表示
 
+`SelectableChannel`对象支持阻塞和非阻塞两种模式(所有的Channel默认都是阻塞模式)，必须使用
+非阻塞模式才能利用非阻塞IO操作。可以通过configureBlocking(false)来设置
 
 
 
